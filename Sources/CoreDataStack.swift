@@ -165,22 +165,23 @@ public final class CoreDataStack {
 
     // MARK: - Private Implementation
 
-    private enum StoreType {
+    enum StoreType {
         case inMemory
         case sqLite(storeURL: URL)
     }
 
-    private let managedObjectModelName: String
-    private let storeType: StoreType
-    private let bundle: Bundle
-    private var persistentStoreCoordinator: NSPersistentStoreCoordinator {
+    let managedObjectModelName: String
+    let storeType: StoreType
+    let bundle: Bundle
+    var persistentStoreCoordinator: NSPersistentStoreCoordinator {
         didSet {
             privateQueueContext = constructPersistingContext()
             privateQueueContext.persistentStoreCoordinator = persistentStoreCoordinator
             mainQueueContext = constructMainQueueContext()
         }
     }
-    private var managedObjectModel: NSManagedObjectModel {
+    
+    var managedObjectModel: NSManagedObjectModel {
         get {
             return bundle.managedObjectModel(modelName: managedObjectModelName)
         }
@@ -199,7 +200,7 @@ public final class CoreDataStack {
         NotificationCenter.default.removeObserver(self)
     }
 
-    private let saveBubbleDispatchGroup = DispatchGroup()
+    let saveBubbleDispatchGroup = DispatchGroup()
 }
 
 public extension CoreDataStack {
@@ -397,8 +398,8 @@ public extension CoreDataStack {
     }
 }
 
-private extension CoreDataStack {
-    @objc private func stackMemberContextDidSaveNotification(_ notification: Notification) {
+extension CoreDataStack {
+    @objc func stackMemberContextDidSaveNotification(_ notification: Notification) {
         guard let notificationMOC = notification.object as? NSManagedObjectContext else {
             assertionFailure("Notification posted from an object other than an NSManagedObjectContext")
             return
@@ -414,8 +415,8 @@ private extension CoreDataStack {
     }
 }
 
-private extension CoreDataStack {
-    private static var documentsDirectory: URL? {
+extension CoreDataStack {
+    static var documentsDirectory: URL? {
         get {
             let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             return urls.first
