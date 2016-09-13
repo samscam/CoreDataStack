@@ -103,7 +103,7 @@ public final class CoreDataStack {
                                             in bundle: Bundle = Bundle.main,
                                             at desiredStoreURL: URL? = nil,
                                             on callbackQueue: DispatchQueue? = nil,
-                                            callback: SetupCallback) {
+                                            callback: @escaping SetupCallback) {
 
         let model = bundle.managedObjectModel(modelName: modelName)
         let storeFileURL = desiredStoreURL ?? URL(string: "\(modelName).sqlite", relativeTo: documentsDirectory!)!
@@ -247,7 +247,7 @@ public extension CoreDataStack {
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: A callback with a `success` or an `ErrorType` value with the error
      */
-    public func resetStore(on callbackQueue: DispatchQueue? = nil, callback: StoreResetCallback) {
+    public func resetStore(on callbackQueue: DispatchQueue? = nil, callback: @escaping StoreResetCallback) {
         let backgroundQueue = DispatchQueue.global(qos: .background)
         let callbackQueue: DispatchQueue = callbackQueue ?? backgroundQueue
         self.saveBubbleDispatchGroup.notify(queue: backgroundQueue) {
@@ -362,7 +362,7 @@ public extension CoreDataStack {
      - parameter on: Optional GCD queue that will be used to dispatch your callback closure. Defaults to background queue used to create the stack.
      - parameter callback: A callback with either the new `NSManagedObjectContext` or an `ErrorType` value with the error
      */
-    public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil, callback: BatchContextCallback) {
+    public func newBatchOperationContext(on callbackQueue: DispatchQueue? = nil, callback: @escaping BatchContextCallback) {
         let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         moc.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         moc.name = "Batch Operation Context"
