@@ -15,12 +15,13 @@ public extension NSPersistentStoreCoordinator {
      */
     @available(iOS, introduced: 8.0, deprecated: 10.0, message: "Use NSPersistentStoreDescription")
     @available(OSX, introduced: 10.10, deprecated: 10.12, message: "Use NSPersistentStoreDescription")
-    public static var stockSQLiteStoreOptions: [NSObject: AnyObject] {
+    public static var stockSQLiteStoreOptions: [String: Any] {
         return [
             NSMigratePersistentStoresAutomaticallyOption: true,
             NSInferMappingModelAutomaticallyOption: true,
             NSSQLitePragmasOption: ["journal_mode": "WAL"]
-        ]
+        ] as [String: Any]
+        
     }
 
     /**
